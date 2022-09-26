@@ -1,0 +1,20 @@
+body {
+    background-color: rgb(241, 241, 241);
+}
+.imglogo {
+    width: 6rem;
+}
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+.nav h4 {
+    font-weight: bold;
+    color: rgb(13, 83, 148);
+    font-family: 'Pacifico', cursive;
+
+}
+.navlink a{
+   color:  rgb(13, 83, 148);
+   text-decoration: none;
+}
+.nav a {
+    margin: 1rem;
+}
