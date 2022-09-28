@@ -1,17 +1,58 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+import  firebase from "firebase/app";
+import "firebase/firestore";
+import 'firebase/auth';
+
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAo6U1pbX1Bb9TRlqhK6POVAEOooXKTND4",
-  authDomain: "todo-app-v1-0.firebaseapp.com",
-  projectId: "todo-app-v1-0",
-  storageBucket: "todo-app-v1-0.appspot.com",
-  messagingSenderId: "447470155366",
-  appId: "1:447470155366:web:449eb411c941cc115f1fa7"
+  apiKey: "AIzaSyC5mwbsziAp-TIeFtNfPuQQ-MfaX_upGOw",
+  authDomain: "todo-app-s1.firebaseapp.com",
+  projectId: "todo-app-s1",
+  storageBucket: "todo-app-s1.appspot.com",
+  messagingSenderId: "802973845420",
+  appId: "1:802973845420:web:4b12ba1bfdf0a8b9aadc09"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app= firebase.initializeApp(firebaseConfig)
+
+
+const db = firebase.firestore(app)
+
+export const signInWithGoogle = ()=>{
+  const provider = new firebase.auth.GoogleAuthProvider();
+  console.log("fffddf");
+  firebase.auth()
+  .signInWithPopup(provider)
+  .then((result) => {
+    console.log(result)
+    const user = result.user
+    return {data:user}
+
+
+    
+  }).catch(error=>{
+    console.log(error);
+    return {error:error}
+  })
+
+}
+
+export const registerWithEmailAndPassword=({email,password,displayName})=>{
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+        console.log(userCredential);
+        db.collection("users").where("uid","==",userCredential.user.uid).update({displayName:displayName})
+        .then(()=>{
+            return {message:"registered succefully !!"}
+
+        }) 
+    })
+ 
+   .catch(error=>{
+    console.log(error);
+    return {error:error}
+  })
+
+
+}
