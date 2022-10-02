@@ -37,13 +37,25 @@ export const signInWithGoogle = ()=>{
 
 }
 
+export const login = async (email,password)=>{
+  try {
+     await  firebase.auth().signInWithEmailAndPassword(email, password)
+     return {success:true}
+  } catch (error) {
+    return {err:error}
+  }
+  
+
+}
+
+
 export const registerWithEmailAndPassword=({email,password,displayName})=>{
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
   .then((userCredential) => {
-        console.log(userCredential);
-        db.collection("users").where("uid","==",userCredential.user.uid).update({displayName:displayName})
+        db.collection("users").doc(userCredential.user.uid).set({displayName:displayName})
         .then(()=>{
+         
             return {message:"registered succefully !!"}
 
         }) 
