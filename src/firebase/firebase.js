@@ -18,23 +18,16 @@ const app= firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore(app)
 
-export const signInWithGoogle = ()=>{
+export const signInWithGoogle = async ()=>{
   const provider = new firebase.auth.GoogleAuthProvider();
-  console.log("fffddf");
-  firebase.auth()
-  .signInWithPopup(provider)
-  .then((result) => {
-    console.log(result)
-    const user = result.user
-    return {data:user}
-
-
-    
-  }).catch(error=>{
-    console.log(error);
+  try {
+     const u =await firebase.auth()
+    .signInWithPopup(provider)
+    if (u) return {success:true}
+  } catch (error) {
     return {error:error}
-  })
-
+  }
+  
 }
 
 export const login = async (email,password)=>{
@@ -42,29 +35,28 @@ export const login = async (email,password)=>{
      await  firebase.auth().signInWithEmailAndPassword(email, password)
      return {success:true}
   } catch (error) {
-    return {err:error}
+    if(error.code=="auth/user-not-found") return {message:"there is no user with that email"}
+    return {message:error.message}
   }
   
 
 }
 
 
-export const registerWithEmailAndPassword=({email,password,displayName})=>{
-
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-        db.collection("users").doc(userCredential.user.uid).set({displayName:displayName})
-        .then(()=>{
-         
-            return {message:"registered succefully !!"}
-
-        }) 
-    })
- 
-   .catch(error=>{
-    console.log(error);
-    return {error:error}
-  })
+export const registerWithEmailAndPassword=async ({email,password,displayName})=>{
+   
+  try {
+     const u = await  firebase.auth().createUserWithEmailAndPassword(email, password)
+     if(u)
+     {
+      const result = await db.collection("users").doc(u.user.uid).set({displayName:displayName})
+     if(result) return {success:true}
+     }
+  } catch (error) {
+     return {error:error}
+  }
+   
+  
 
 
 }

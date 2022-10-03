@@ -9,11 +9,28 @@ function Register() {
      const[confirmedPassword,setconfirmedPassword] = useState("")
      const[email,setEmail] =useState("")
      
-     
+     const [errors,setErrors] = useState({})
+
      const register=(e)=>{
         e.preventDefault()
+        setErrors({})
+        let errs = {}
         if(name && name && email && confirmedPassword===password)
            registerWithEmailAndPassword({email,password,displayName:name})
+        else {
+
+          if(!email) errs.email = "the email must be required" 
+          
+          if(!name) errs.name = "the name must be required" 
+          
+          if(!password) errs.password = "the password must be required" 
+          
+          if(!confirmedPassword) errs.confirmedPassword = "the confirmed password must be required" 
+
+          
+
+
+        }
      }
      
 
