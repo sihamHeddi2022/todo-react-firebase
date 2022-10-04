@@ -18,6 +18,7 @@ function App (){
    
     useEffect(()=>{
      firebase.auth().onAuthStateChanged((user)=>{
+      console.log(user);
         setUser(user)
      })
     },[])

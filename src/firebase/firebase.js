@@ -16,7 +16,7 @@ const firebaseConfig = {
 const app= firebase.initializeApp(firebaseConfig)
 
 
-const db = firebase.firestore(app)
+// const db = firebase.firestore(app)
 
 export const signInWithGoogle = async ()=>{
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -42,6 +42,15 @@ export const login = async (email,password)=>{
 
 }
 
+export const logout = ()=>{
+  return firebase.auth().signOut()
+  .then(function() {
+      return {success:true}
+  })
+  .catch(function(error) {
+     return {error:error.message}
+  });
+}
 
 export const registerWithEmailAndPassword=async ({email,password,displayName})=>{
    
@@ -49,11 +58,13 @@ export const registerWithEmailAndPassword=async ({email,password,displayName})=>
      const u = await  firebase.auth().createUserWithEmailAndPassword(email, password)
      if(u)
      {
-      const result = await db.collection("users").doc(u.user.uid).set({displayName:displayName})
-     if(result) return {success:true}
+
+       await u.user.updateProfile({displayName:displayName})
+      return {success:true}
+
      }
   } catch (error) {
-     return {error:error}
+     return {error:error.message}
   }
    
   

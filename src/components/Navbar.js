@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import { context } from '../context/context';
+import { logout } from '../firebase/firebase';
 import img from "../img/todo.png"
 import  "../style/style.css";
+
 function Navbar() {
+
+   const c = useContext(context)
+   const history = useHistory()
+  
+
+   const signOut = async ()=>{
+      
+      
+
+      const d = await logout()
+      console.log(d);
+      if(d.success) history.push("/login")
+      else
+        console.log(d.error)
+
+
+   }
+
+
+
     return (  <div>
            
           <div className="container mt-3 nav text-center">
@@ -11,11 +35,12 @@ function Navbar() {
                 <h4>TODO LIST APP</h4>
              </div>
              <div className="d-flex flex-row  justify-content-center navlink w-100">
-             
-               <NavLink to="/login" >Login</NavLink>
-               <NavLink  to="/register">Register</NavLink>
-               <NavLink  to="/logout">Log out </NavLink>
-               <NavLink  to="/dashboard">Dashboard</NavLink>
+               
+
+               {!c.user && <NavLink to="/login" >Login</NavLink> }
+               {!c.user && <NavLink  to="/register">Register</NavLink> }
+               {c.user && <button className='btn ' onClick={signOut}>Log out </button> }
+               {c.user && <NavLink  to="/dashboard">Dashboard</NavLink> }
              
              </div>
           </div>
