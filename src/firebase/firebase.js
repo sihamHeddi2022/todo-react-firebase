@@ -16,7 +16,33 @@ const firebaseConfig = {
 const app= firebase.initializeApp(firebaseConfig)
 
 
-// const db = firebase.firestore(app)
+const db = firebase.firestore(app)
+
+export const searchUser =(name)=>{
+
+   return db.collection("users").where("displayName","==",name)
+    .get().then((doc)=>{
+       console.log(doc.data());
+        return {data:doc.data()}
+    })
+    .catch(err=>{
+       return {error:err}
+    })
+}
+
+
+export const addTask = ({name,description,owner,theme,date,users})=>{
+  
+   return db.collection("tasks").add({name,description,owner,theme,date,users})
+   .then(()=>{
+       return {success:true}
+   })
+   .catch((error)=>{
+      return {error:error}
+   })
+
+} 
+
 
 export const signInWithGoogle = async ()=>{
   const provider = new firebase.auth.GoogleAuthProvider();

@@ -17,7 +17,7 @@ function Navbar() {
       
 
       const d = await logout()
-      console.log(d);
+    
       if(d.success) history.push("/login")
       else
         console.log(d.error)

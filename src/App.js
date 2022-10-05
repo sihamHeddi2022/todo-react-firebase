@@ -9,6 +9,7 @@ import Add from './components/Add';
 import Edit from './components/Edit';
 import {context} from './context/context'
 import firebase from 'firebase';
+import NotAuth from './components/Protected';
 
 
 
@@ -34,20 +35,35 @@ function App (){
               </Route>
               
               <Route path='/login'>
-                <Login/>
+
+                  <NotAuth user={user}>
+                    <Login/>
+                  </NotAuth>
+               <Login/> 
               </Route>
               
               <Route path='/register'>
-                  <Register/>
+                
+                  <NotAuth user={user}>
+                    <Register/> 
+                  </NotAuth>
+
               </Route>
               <Route path='/dashboard'>
-                  <Dashboard/>
+                  {
+                     user? <Dashboard/> :<Redirect to="/login"/>
+                  }
               </Route>
               <Route path='/add'>
-                  <Add/>
+              {
+                     user? <Add/> : <Redirect to="/login"/>
+              }
               </Route>
               <Route path='/edit/:id'>
-                  <Edit/>
+                {
+                     user?
+                  <Edit/> : <Redirect to="/login"/>
+                }
               </Route>
             </Switch>
         </context.Provider>
