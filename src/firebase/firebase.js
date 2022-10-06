@@ -5,14 +5,13 @@ import 'firebase/auth';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC5mwbsziAp-TIeFtNfPuQQ-MfaX_upGOw",
-  authDomain: "todo-app-s1.firebaseapp.com",
-  projectId: "todo-app-s1",
-  storageBucket: "todo-app-s1.appspot.com",
-  messagingSenderId: "802973845420",
-  appId: "1:802973845420:web:4b12ba1bfdf0a8b9aadc09"
-};
-
+   apiKey: "AIzaSyDw2li5VYpZXsJx-Dk9TY-tisC4eh3iTFw",
+   authDomain: "todo-app-v1-67a53.firebaseapp.com",
+   projectId: "todo-app-v1-67a53",
+   storageBucket: "todo-app-v1-67a53.appspot.com",
+   messagingSenderId: "366543160584",
+   appId: "1:366543160584:web:3003c81934c8283fc458bd"
+ };
 const app= firebase.initializeApp(firebaseConfig)
 
 
@@ -20,9 +19,12 @@ const db = firebase.firestore(app)
 
 export const searchUser =(name)=>{
 
-   return db.collection("users").where("displayName","==",name)
+   return db.collection("users").where("displayName",">=",name)
     .get().then((doc)=>{
-       console.log(doc.data());
+      doc.docs.forEach((doc)=>
+      {
+         console.log(doc.data());
+      })
         return {data:doc.data()}
     })
     .catch(err=>{
@@ -47,9 +49,19 @@ export const addTask = ({name,description,owner,theme,date,users})=>{
 export const signInWithGoogle = async ()=>{
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
-     const u =await firebase.auth()
+     const {user} =await firebase.auth()
     .signInWithPopup(provider)
-    if (u) return {success:true}
+    if (user) {
+      const f = await db.collection("users").where("id","==",user.uid).get()
+      if(f.size==0)
+      console.log("I'm the user ",user);
+       await db.collection("users").add({
+         email:user.email,
+         id:user.uid,
+         displayName:user.displayName
+       })
+      return {success:true}
+   }
   } catch (error) {
     return {error:error}
   }
@@ -81,14 +93,16 @@ export const logout = ()=>{
 export const registerWithEmailAndPassword=async ({email,password,displayName})=>{
    
   try {
-     const u = await  firebase.auth().createUserWithEmailAndPassword(email, password)
-     if(u)
-     {
-
-       await u.user.updateProfile({displayName:displayName})
-      return {success:true}
-
-     }
+   const {user} = await  firebase.auth().createUserWithEmailAndPassword(email, password)
+   const f = await db.collection("users").where("id","==",user.uid).get()
+   if(f.size==0)
+   console.log("I'm the user ",user);
+    await db.collection("users").add({
+      email:user.email,
+      id:user.uid,
+      displayName:user.displayName
+    })
+   return {success:true}
   } catch (error) {
      return {error:error.message}
   }

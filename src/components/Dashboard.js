@@ -61,7 +61,7 @@ function Dashboard() {
                                    <option value="0">Completed</option>
                                 </select>
                                 <button className='btn btn-danger'>
-                                <i class="bi bi-trash3"></i>  Delete
+                                <i className="bi bi-trash3"></i>  Delete
                                 </button>
                             </div>
                       </div>
@@ -107,7 +107,7 @@ function Dashboard() {
                                    <option value="0">Completed</option>
                                 </select>
                                 <button className='btn btn-danger'>
-                                <i class="bi bi-trash3"></i>  Delete
+                                <i className="bi bi-trash3"></i>  Delete
                                 </button>
                             </div>
                       </div>

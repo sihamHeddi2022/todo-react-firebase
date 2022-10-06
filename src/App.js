@@ -19,7 +19,6 @@ function App (){
    
     useEffect(()=>{
      firebase.auth().onAuthStateChanged((user)=>{
-      console.log(user);
         setUser(user)
      })
     },[])
@@ -39,7 +38,7 @@ function App (){
                   <NotAuth user={user}>
                     <Login/>
                   </NotAuth>
-               <Login/> 
+             
               </Route>
               
               <Route path='/register'>

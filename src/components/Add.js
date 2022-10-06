@@ -12,9 +12,7 @@ function Add() {
   const [users,setUsers] = useState("")
   
   const searchUsers = async(e)=>{
-    console.log(e.target.value);
       const users = await searchUser(e.target.value)
-     console.log(users.data);
   }
 
     return ( 
