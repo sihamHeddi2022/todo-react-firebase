@@ -17,25 +17,51 @@ const app= firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore(app)
 
-export const searchUser =(name)=>{
 
-   return db.collection("users").where("displayName",">=",name)
-    .get().then((doc)=>{
-      doc.docs.forEach((doc)=>
-      {
-         console.log(doc.data());
+
+
+
+
+
+
+
+
+// export const searchUser =(name)=>{
+
+//    return db.collection("users").where("displayName",">=",name)
+//     .get().then((doc)=>{
+//       console.log(doc.docs);
+//       let users = []
+//       doc.docs.forEach((doc)=>
+//       {
+//          users.push(doc.data())
+//       })
+//         return {data:users}
+//     })
+//     .catch(err=>{
+//        return {error:err}
+//     })
+// }
+
+
+export const getTasks = (uid)=>{
+  return db.collection("tasks").where("owner","==",uid)
+  .get().then((docs)=>{
+      const tasks =[]
+      docs.forEach((doc)=>{
+        tasks.push(doc.data())
       })
-        return {data:doc.data()}
-    })
-    .catch(err=>{
-       return {error:err}
-    })
+      return {tasks:tasks}
+  }).catch((err)=>{
+    return {err:err}
+  })
 }
 
 
-export const addTask = ({name,description,owner,theme,date,users})=>{
+export const addTask = ({name,description,owner,theme,date,status})=>{
   
-   return db.collection("tasks").add({name,description,owner,theme,date,users})
+   return db.collection("tasks").add({id:Math.floor(Math.random() * 1000)
+    ,name,description,owner,theme,date,status})
    .then(()=>{
        return {success:true}
    })

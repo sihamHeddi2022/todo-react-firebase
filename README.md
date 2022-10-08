@@ -9,7 +9,6 @@
     - description 
     - color of task
    - schedule
-   - share with user
    - status :
             - in progress
            - todo (by default )

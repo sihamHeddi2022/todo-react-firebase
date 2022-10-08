@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { context } from '../context/context';
+import { getTasks } from '../firebase/firebase';
 
 
 function Dashboard() {
+    const c = useContext(context)
+    const [tasks,setTasks] = useState()
+    const [isLoading,setIsLoading] = useState(true)
+    useEffect(()=>{
+       const get = async()=>{
+            const tasks = await getTasks(c.user.uid)
+         
+            if(tasks.tasks) {
+                setTasks(tasks.tasks)
+                setIsLoading(false)
+                console.log(tasks.tasks);
+            }
+            else console.log(tasks.err);
+           
+       }
+        get()
+    },[])
     return ( <div>
            
         <div className="container my-4">
@@ -21,43 +40,28 @@ function Dashboard() {
            - todo (by default )
            - completed */}
             <div className="tasks px-5 mt-3">
-                <div className="task px-4 py-3 rounded rounded-5 text-white" style={{backgroundColor:"green"}}>
+                {
+                    !isLoading && tasks && tasks.length>0 && tasks.map((task)=>(
+                        <div className="task px-4 mt-3 py-3 rounded rounded-5 text-white" style={{backgroundColor:"green"}} key={task.id}>
                         
                         <h4>
-                            Name of task
+                            {task.name}
                         </h4>
                         <small>
-                              23/05/2022 - 04:00
+                              {task.date}
                         </small>
                         <p>
-                            description
+                            {task.description}
                         </p>
                      
                         <div className="d-flex justify-content-between">
-                            <div className="d-flex align-items-center mb-0">
                        
-                    
-                                    <div className='d-flex flex-column align-items-center'>
-                                        <small className='my-1'>
-                                             Shared With
-                                         </small> 
-                                        <div className="d-flex">
-                                           <img  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=30&h=30&q=40" className="rounded-circle mr-2" alt="Cinque Terre"/>
-                                            
-                                            <h6>
-                                                full name
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <p className='ml-4 mt-3'>
-                                        status
-                                    </p>
-                            </div>
                             <div className="d-flex align-items-center">
                           
-                               <select className='mx-2 form-control'>
+                               <select className='mx-2 form-control' value={task.status}>
                                 
-                                   <option value="1">In Progress</option>
+                                   <option value="1" >In Progress</option>
+                                   <option value="-1">Todo</option>
                                    <option value="0">Completed</option>
                                 </select>
                                 <button className='btn btn-danger'>
@@ -67,52 +71,10 @@ function Dashboard() {
                       </div>
 
                 </div>
-                <div className="task my-3 px-4 py-3 rounded rounded-5 text-white" style={{backgroundColor:"orange"}}>
-                        
-                        <h4>
-                            Name of task
-                        </h4>
-                        <small>
-                              23/05/2022 - 04:00
-                        </small>
-                        <p>
-                            description
-                        </p>
-                     
-                        <div className="d-flex justify-content-between">
-                            <div className="d-flex align-items-center mb-0">
-                       
-                    
-                                    <div className='d-flex flex-column align-items-center'>
-                                        <small className='my-1'>
-                                             Shared With
-                                         </small> 
-                                        <div className="d-flex">
-                                           <img  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=30&h=30&q=40" className="rounded-circle mr-2" alt="Cinque Terre"/>
-                                            
-                                            <h6>
-                                                full name
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <p className='ml-4 mt-3'>
-                                        status
-                                    </p>
-                            </div>
-                            <div className="d-flex align-items-center">
-                          
-                               <select className='mx-2 form-control'>
-                                
-                                   <option value="1">In Progress</option>
-                                   <option value="0">Completed</option>
-                                </select>
-                                <button className='btn btn-danger'>
-                                <i className="bi bi-trash3"></i>  Delete
-                                </button>
-                            </div>
-                      </div>
-
-                </div>
+                    ))
+                }
+       
+        
             </div>
  
 
