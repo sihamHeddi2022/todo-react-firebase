@@ -15,6 +15,6 @@
            - completed
 * clear all tasks
 * delete the task
-* edit task  by clicking on  the task 
+* edit task  by double clicking on  the task 
 * login ( email or google auth )
 * signup 
