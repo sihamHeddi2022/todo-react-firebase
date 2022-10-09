@@ -44,12 +44,60 @@ const db = firebase.firestore(app)
 // }
 
 
+
+export const updateTask = ({id,name,description,theme,date})=>{
+  return db.collection("tasks").doc(id).update({
+    name,description,theme,date
+  }).then(()=>{
+    return {success:true}
+  })
+  .catch(err=>{
+   return {error:err}
+  })
+}
+export const getTask = (id)=>{
+  return db.collection("tasks").doc(id).get()
+  .then((doc)=>{
+    return {data:doc.data()}
+  })
+  .catch(err=>{
+    return {error:err}
+  })
+}
+
+
+export const deleteTasks = (id)=>{
+   return db.collection("tasks").doc(id)
+   .delete()
+   .then(()=>{
+     return {success:true}
+   })
+   .catch(err=>{
+    return {error:err}
+   })
+}
+
+
+export const updateSt = (id,status)=>{
+  return db.collection("tasks").doc(id).update({
+    status:status
+  }).then(()=>{
+    return {success:true}
+  })
+  .catch(err=>{
+    return {error:err}
+  })
+}
+
+
 export const getTasks = (uid)=>{
   return db.collection("tasks").where("owner","==",uid)
   .get().then((docs)=>{
       const tasks =[]
       docs.forEach((doc)=>{
-        tasks.push(doc.data())
+        tasks.push({
+          id:doc.id,
+          task:doc.data()})
       })
       return {tasks:tasks}
   }).catch((err)=>{
@@ -60,8 +108,7 @@ export const getTasks = (uid)=>{
 
 export const addTask = ({name,description,owner,theme,date,status})=>{
   
-   return db.collection("tasks").add({id:Math.floor(Math.random() * 1000)
-    ,name,description,owner,theme,date,status})
+   return db.collection("tasks").add({name,description,owner,theme,date,status})
    .then(()=>{
        return {success:true}
    })

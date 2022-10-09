@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { context } from "../context/context";
-import { addTask, searchUser } from "../firebase/firebase";
+import { addTask} from "../firebase/firebase";
 
 function Add() {
   
