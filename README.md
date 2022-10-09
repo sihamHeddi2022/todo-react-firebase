@@ -9,13 +9,13 @@
     - description 
     - color of task
    - schedule
-   - share with user
+  
    - status :
             - in progress
            - todo (by default )
            - completed
 * clear all tasks
 * delete the task
-* edit task  by clicking on  the task 
+* edit task  by double clicking on  the task 
 * login ( email or google auth )
 * signup 
